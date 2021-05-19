@@ -1,0 +1,180 @@
+</div>
+</main>
+<footer class="container-fluid fixed-bottom">
+    Footer
+    {{ .Copyrights}}
+</footer>
+
+<div class="modal fade" id="addString-Modal" tabindex="-1" aria-labelledby="addStringModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addStringModalLabel">Добавление элемента: <span></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="string-element" class="col-form-label">Значение элемента:</label>
+                        <input type="text" class="form-control" id="string-element">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary">Добавить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addTime-Modal" tabindex="-1" aria-labelledby="addTimeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTimeModalLabel">Добавление элемента: <span></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Recipient:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary">Добавить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addDay-Modal" tabindex="-1" aria-labelledby="addDayModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDayModalLabel">Добавление элемента: <span></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <input class="form-check-input" type="checkbox" value="0" id="mdl-day-1">
+                        <label for="mdl-day-1" class="form-check-label">Понедельник</label>
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-check-input" type="checkbox" value="1" id="mdl-day-2">
+                        <label for="mdl-day-2" class="form-check-label">Вторник</label>
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-check-input" type="checkbox" value="2" id="mdl-day-3">
+                        <label for="mdl-day-3" class="form-check-label">Среда</label>
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-check-input" type="checkbox" value="3" id="mdl-day-4">
+                        <label for="mdl-day-4" class="form-check-label">Четверг</label>
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-check-input" type="checkbox" value="4" id="mdl-day-5">
+                        <label for="mdl-day-5" class="form-check-label">Пятница</label>
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-check-input" type="checkbox" value="5" id="mdl-day-6">
+                        <label for="mdl-day-6" class="form-check-label">Суббота</label>
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-check-input" type="checkbox" value="6" id="mdl-day-7">
+                        <label for="mdl-day-7" class="form-check-label">Воскресение</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary">Добавить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" defer>
+    const __App = new Proxy({
+        addItem: (item, type, index) => {
+            `<div className="form-check">
+                <input className="form-check-input" type="checkbox" value="" id="${type}-${index}">
+                    <label className="form-check-label" htmlFor="${type}-${index}">
+                        ${item}
+                    </label>
+            </div>`
+        },
+        enums: {
+            log_levels: [
+                'INFO',
+                'DEBUG',
+            ],
+        },
+        options: {{ .Params }},
+    }, {
+        get(target, p, receiver) {
+            if (!target.hasOwnProperty(p)) {
+                console.error(`[APP] Неизвестное свойство: ${p}`)
+                return undefined
+            }
+
+            return target[p]
+        },
+
+        set(target, p, value, receiver) {
+            target[p] = value
+        },
+        deleteProperty(target, p) {
+            if (!target.hasOwnProperty(p)) {
+                console.error(`[APP] Неизвестное свойство: ${p}`)
+                return false
+            }
+
+            delete target[p]
+            return true
+        },
+    });
+
+
+    $('[data-action="add"]').on('click', function (e) {
+        e.preventDefault();
+
+        switch (this.dataset.type) {
+            case 'string':
+                $('#addString-Modal .modal-title > span').text("Строка")
+                $('#addString-Modal').modal('show');
+                break;
+            case 'time':
+                $('#addTime-Modal .modal-title > span').text("Время")
+                $('#addTime-Modal').modal('show');
+                break;
+            case 'day':
+                $('#addDay-Modal .modal-title > span').text("День")
+                $('#addDay-Modal').modal('show');
+                break;
+        }
+
+        $(this).parents('.modal').attr('target', this.dataset.target)
+
+        return false;
+    })
+
+    $('#addDay-Modal .modal-footer .btn-primary').on('click', function (e) {
+        e.preventDefault()
+
+        const sect = $(this).parents('.modal').dataset.target
+
+        return false
+    })
+</script>
+</body>
+</html>

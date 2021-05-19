@@ -1,0 +1,110 @@
+<section id="reference" class="col-12 my-3">
+    <div class="row">
+        <div class="col-4">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card h-100">
+                        <div class="card-header">Дни недели</div>
+                        <div class="card-body">
+                            {{ range $index, $item := .Params.Sheduler.Day }}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="day-{{ $index }}">
+                                <label class="form-check-label" for="day-{{ $index }}">
+                                    {{ range $ind, $day := $item }}
+                                        {{ if eq $day "1" }}
+                                            {{ index $.Days $ind }}
+                                        {{ end }}
+                                    {{ end }}
+                                </label>
+                            </div>
+                            {{ end }}
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-sm btn-danger" disabled aria-disabled="true">Удалить</button>
+                            <button class="btn btn-sm btn-primary float-end" data-action="add" data-target="day" data-type="day">Добавить</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card h-100">
+                        <div class="card-header">Период времени</div>
+                        <div class="card-body">
+                            {{ range $index, $item := .Params.Sheduler.Time }}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="time-{{ $index }}">
+                                <label class="form-check-label" for="time-{{ $index }}">
+                                     {{ $item }}
+                                </label>
+                            </div>
+                            {{ end }}
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-sm btn-danger" disabled aria-disabled="true">Удалить</button>
+                            <button class="btn btn-sm btn-primary float-end" data-action="add" data-target="time" data-type="time">Добавить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        <div class="col-5">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card h-100">
+                        <div class="card-header">Отправители</div>
+                        <div class="card-body">
+                            {{ range $index, $item := .Params.Templates.Sender }}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="sender-{{ $index }}">
+                                <label class="form-check-label" for="sender-{{ $index }}">
+                                    {{ $item }}
+                                </label>
+                            </div>
+                            {{ end }}
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-sm btn-danger" disabled aria-disabled="true">Удалить</button>
+                            <button class="btn btn-sm btn-primary float-end" data-action="add" data-target="sender" data-type="string">Добавить</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card h-100">
+                        <div class="card-header">Темы</div>
+                        <div class="card-body">
+                            {{ range $index, $item := .Params.Templates.Subject }}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="subject-{{ $index }}">
+                                <label class="form-check-label" for="subject-{{ $index }}">
+                                    {{ $item }}
+                                </label>
+                            </div>
+                            {{ end }}
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-sm btn-danger" disabled aria-disabled="true">Удалить</button>
+                            <button class="btn btn-sm btn-primary float-end" data-action="add" data-target="subject" data-type="string">Добавить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card h-100">
+                <div class="card-header">Телефоны</div>
+                <div class="card-body">
+                    {{ range $index, $item := .Params.Destionations.Tel_num }}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="phone-{{ $index }}">
+                        <label class="form-check-label" for="phone-{{ $index }}">
+                            {{ $item }}
+                        </label>
+                    </div>
+                    {{ end }}
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-sm btn-danger" disabled aria-disabled="true">Удалить</button>
+                    <button class="btn btn-sm btn-primary float-end" data-action="add" data-target="telnum" data-type="string">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
