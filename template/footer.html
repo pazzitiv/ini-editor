@@ -105,11 +105,11 @@
         crossorigin="anonymous"></script>
 <script type="text/javascript" defer>
     const __App = new Proxy({
-        addItem: (item, type, index) => {
+        addItem: (value, dataType, index, type = 'checkbox') => {
             `<div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="${type}-${index}">
-                    <label className="form-check-label" htmlFor="${type}-${index}">
-                        ${item}
+                <input className="form-check-input" type="${type}" value="" id="${dataType}-${index}">
+                    <label className="form-check-label" htmlFor="${dataType}-${index}">
+                        ${value}
                     </label>
             </div>`
         },
@@ -119,7 +119,7 @@
                 'DEBUG',
             ],
         },
-        options: {{ .Params }},
+        options: {},
     }, {
         get(target, p, receiver) {
             if (!target.hasOwnProperty(p)) {
@@ -129,9 +129,29 @@
 
             return target[p]
         },
-
         set(target, p, value, receiver) {
             target[p] = value
+
+            if (p === 'options') {
+                for(let v of Object.entries(value)) {
+                    switch (v[0]) {
+                            case "Sheduler":
+                                break;
+                            case "Templates":
+                                break;
+                            case "Destionations":
+                                break;
+                            case "Map":
+                                break;
+                            case "System":
+                                break;
+                            case "Imap":
+                                break;
+                            case "Asterisk":
+                                break;
+                    }
+                }
+            }
         },
         deleteProperty(target, p) {
             if (!target.hasOwnProperty(p)) {
@@ -143,6 +163,8 @@
             return true
         },
     });
+
+    __App.options = {{ .Params }};
 
 
     $('[data-action="add"]').on('click', function (e) {
@@ -163,7 +185,7 @@
                 break;
         }
 
-        $(this).parents('.modal').attr('target', this.dataset.target)
+        $(this).parents('.modal')[0].attr('target', this.dataset.target)
 
         return false;
     })
@@ -171,7 +193,17 @@
     $('#addDay-Modal .modal-footer .btn-primary').on('click', function (e) {
         e.preventDefault()
 
-        const sect = $(this).parents('.modal').dataset.target
+        const modal = $(this).parents('.modal');
+        const form = modal.children('form')
+        //const sect = modal.dataset.target ?? null
+
+        fetch('/api/sections', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new FormData(form[0])
+        })
 
         return false
     })

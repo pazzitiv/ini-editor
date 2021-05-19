@@ -31,7 +31,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 
     data.Params, _ = parseConfig(config)
 
-    err = buildTemplate(w, &data, "template/index.html", "template/scheduler.html")
+    err = buildTemplate(w, &data, "template/index.html", "template/scheduler-api.html")
     if err != nil {
         log.Printf("[FATAL] %s", err.Error())
     }

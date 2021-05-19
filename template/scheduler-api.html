@@ -1,0 +1,62 @@
+<section id="scheduler" class="col-12 my-5">
+    <h2 class="h2">Задания<button class="btn btn-sm btn-dark float-end">Добавить</button></h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Дни недели
+                </th>
+                <th>
+                    Период времени
+                </th>
+                <th>
+                    Отправитель
+                </th>
+                <th>
+                    Тема
+                </th>
+                <th>
+                    Телефон
+                </th>
+                <th>
+                    Активность
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range $index, $item := .Params.Map.Map_id}}
+                <tr>
+                    <td>
+                        {{ $days := $.Params.GetListItem $.Params.Sheduler.Day (index $item 0) }}
+                        {{ range $ind, $day := $days }}
+                            {{ if eq $day "1" }}
+                                {{ index $.Days $ind }}
+                            {{ end }}
+                        {{ end }}
+                    </td>
+                    <td>
+                        {{ $.Params.GetItem $.Params.Sheduler.Time (index $item 1) }}
+                    </td>
+                    <td>
+                        {{ $.Params.GetItem $.Params.Templates.Sender (index $item 2) }}
+                    </td>
+                    <td>
+                        {{ $.Params.GetItem $.Params.Templates.Subject (index $item 3) }}
+                    </td>
+                    <td>
+                        {{ $.Params.GetItem $.Params.Destionations.Tel_num (index $item 4) }}
+                    </td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value=""
+                                {{ if eq "1" (index $item 5) }}
+                                    checked
+                                {{ end }}
+                            />
+                        </div>
+                    </td>
+                </tr>
+            {{ end }}
+        </tbody>
+    </table>
+</section>
