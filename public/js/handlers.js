@@ -1,5 +1,9 @@
 const proxyHandler = {
     get(target, p, receiver) {
+        if(typeof target[p] === "function") {
+            return target[p]
+        }
+
         if (!target.hasOwnProperty(p)) {
             console.error(`[APP] Неизвестное свойство: ${p}`)
             return undefined
@@ -27,10 +31,62 @@ const proxyHandler = {
         delete target[p]
         return true
     },
+    getOwnPropertyDescriptor(target, property) {
+        if (target.hasOwnProperty(property)) {
+            return {configurable: true, enumerable: true};
+        }
+    }
 }
 
 window.handlers = {
-    ShedulerHandler: (value = undefined) => {
-        __App.addItem('123', 'day', 0)
+    optionsHandler: (value) => {
+        for(let option in value) {
+            switch (option) {
+                case 'Scheduler':
+                    $(`#day-list`).innerHTML = '';
+                    $(`#time-list`).innerHTML = '';
+
+                    value.Scheduler.Day.forEach((item, index) => {
+                        let days = item.map((day, i) => {
+                            if(day === "1") {
+                                return __App.enums.days[i]
+                            }
+                            return ''
+                        }).filter(d => d !== '')
+
+                        __App.addItem(days.join(','),'day',index)
+                    })
+
+                    value.Scheduler.Time.forEach((item, index) => {
+                        __App.addItem(item,'time',index)
+                    })
+                    break;
+                case 'Templates':
+                    $(`#sender-list`).innerHTML = '';
+                    $(`#subject-list`).innerHTML = '';
+
+                    value.Templates.Sender.forEach((item, index) => {
+                        __App.addItem(item,'sender',index)
+                    })
+                    value.Templates.Subject.forEach((item, index) => {
+                        __App.addItem(item,'subject',index)
+                    })
+                    break;
+                case 'Destinations':
+                    $(`#phone-list`).innerHTML = '';
+
+                    value.Destinations.Tel_num.forEach((item, index) => {
+                        __App.addItem(item,'phone',index)
+                    })
+                    break;
+            }
+        }
+    },
+    schedulesHandler: (value = undefined) => {
+        const schedules = value.Map_id;
+
+        schedules.forEach((item, ind) => {
+            __App.addSchedule(item, ind + 1)
+        })
     },
 }

@@ -55,7 +55,19 @@ class Api {
         let obj = {};
         const arr = el.serializeArray();
 
-        arr.forEach((item) => {obj[item.name] = item.value})
+        arr.forEach((item) => {
+            if(obj.hasOwnProperty(item.name)) {
+                obj[item.name] = [
+                    obj[item.name],
+                ]
+            }
+
+            if(Array.isArray(obj[item.name])) {
+                obj[item.name].push(item.value)
+            } else {
+                obj[item.name] = item.value
+            }
+        })
 
         return obj
     }
