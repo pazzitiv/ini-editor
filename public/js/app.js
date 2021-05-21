@@ -108,11 +108,14 @@ $('[data-action="add"]').on('click', function (e) {
     return false;
 })
 
-$('#addDay-Modal .modal-footer .btn-primary').on('click', function (e) {
+$('#addDay-Modal .modal-footer .btn-primary, ' +
+    '#addTime-Modal .modal-footer .btn-primary, ' +
+    '#addString-Modal .modal-footer .btn-primary').on('click', function (e) {
     e.preventDefault()
 
     const modal = $(this).parents('.modal');
     const form = modal.find('form')
+    form.find('input').attr('name', modal.attr('target'))
 
     fetch('/api/dictionaries', {
         method: 'POST',

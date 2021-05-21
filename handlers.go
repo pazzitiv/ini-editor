@@ -107,6 +107,58 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
                     if err != nil {
                         return 
                     }
+                case "time":
+                    var days []string
+
+                    config = common.GetConfiguration()
+                    items := strings.Split(item[0], ",")
+                    days = make([]string, 0, 7)
+
+                    for j := 0; j < 7; j++ {
+                        enabled := "0"
+                        for _, i := range items {
+                            ind, _ := strconv.Atoi(i)
+
+                            if ind == j {
+                                enabled = "1"
+                                break
+                            }
+                        }
+                        days = append(days, enabled)
+                    }
+
+                    config.Scheduler.Day = append(config.Scheduler.Day, days)
+
+                    err := common.SaveConfiguration(config)
+                    if err != nil {
+                        return
+                    }
+                case "string":
+                    var days []string
+
+                    config = common.GetConfiguration()
+                    items := strings.Split(item[0], ",")
+                    days = make([]string, 0, 7)
+
+                    for j := 0; j < 7; j++ {
+                        enabled := "0"
+                        for _, i := range items {
+                            ind, _ := strconv.Atoi(i)
+
+                            if ind == j {
+                                enabled = "1"
+                                break
+                            }
+                        }
+                        days = append(days, enabled)
+                    }
+
+                    config.Scheduler.Day = append(config.Scheduler.Day, days)
+
+                    err := common.SaveConfiguration(config)
+                    if err != nil {
+                        return
+                    }
                 }
             }
 
