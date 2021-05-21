@@ -15,9 +15,9 @@ const __App = new Proxy({
 
             switch (index) {
                 case 0:
-                    if(__App.has(__App.options, 'Scheduler')) {
+                    if (__App.has(__App.options, 'Scheduler')) {
                         let days = __App.options.Scheduler.Day[parseInt(item) - 1].map((day, i) => {
-                            if(day === "1") {
+                            if (day === "1") {
                                 return __App.enums.days[i]
                             }
                             return ''
@@ -27,22 +27,22 @@ const __App = new Proxy({
                     }
                     break
                 case 1:
-                    if(__App.has(__App.options, 'Scheduler')) {
+                    if (__App.has(__App.options, 'Scheduler')) {
                         cell.innerHTML = __App.options.Scheduler.Time[parseInt(item) - 1]
                     }
                     break
                 case 2:
-                    if(__App.has(__App.options, 'Templates')) {
+                    if (__App.has(__App.options, 'Templates')) {
                         cell.innerHTML = __App.options.Templates.Sender[parseInt(item) - 1]
                     }
                     break
                 case 3:
-                    if(__App.has(__App.options, 'Templates')) {
+                    if (__App.has(__App.options, 'Templates')) {
                         cell.innerHTML = __App.options.Templates.Subject[parseInt(item) - 1]
                     }
                     break
                 case 4:
-                    if(__App.has(__App.options, 'Destinations')) {
+                    if (__App.has(__App.options, 'Destinations')) {
                         cell.innerHTML = __App.options.Destinations.Tel_num[parseInt(item) - 1]
                     }
                     break
@@ -114,8 +114,6 @@ $('#addDay-Modal .modal-footer .btn-primary').on('click', function (e) {
     const modal = $(this).parents('.modal');
     const form = modal.find('form')
 
-    console.log(new FormData(form[0]))
-
     fetch('/api/dictionaries', {
         method: 'POST',
         headers: {
@@ -123,6 +121,20 @@ $('#addDay-Modal .modal-footer .btn-primary').on('click', function (e) {
         },
         body: __Api.prepareData(__Api.serializeObject(form))
     })
+        .then(response => {
+            //response.json()
+            __Api.get('dictionaries')
+                .then((response) => {
+                    $('.card-body[id*="-list"]').each((ind, item) => item.innerHTML = '')
+                    __App.options = response.data
+
+                    __Api.get('schedules')
+                        .then((response) => {
+                            __App.schedules = response.data.Map
+                            $('.modal').modal('hide');
+                        })
+                })
+        })
 
     return false
 })
