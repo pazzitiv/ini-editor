@@ -14,7 +14,8 @@ func main() {
     Server.HandleFunc("/", mainHandler)
 
     Server.HandleFunc("/api/{module}", apiHandler)
-    Server.HandleFunc("/api/{module}/{id}", apiHandler)
+    Server.HandleFunc("/api/{module}/{param}", apiHandler)
+    Server.HandleFunc("/api/{module}/{param}/{id}", apiHandler)
 
     fileServer := http.FileServer(http.Dir("./public/"))
     Server.

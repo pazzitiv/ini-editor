@@ -51,6 +51,19 @@ class Api {
         }).then(response => response.json())
     }
 
+    delete(method, id = null, data = null) {
+        return fetch(this.base + method + `${id ? '/' + id : ''}` + (data ? '?' + this.prepareData(data) : ''), {
+            method: 'DELETE',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            referrerPolicy: 'no-referrer'
+        })
+    }
+
     serializeObject(el) {
         let obj = {};
         const arr = el.serializeArray();

@@ -1,7 +1,7 @@
 const __App = new Proxy({
     addItem: (value, dataType, index, type = 'checkbox') => {
         $(`#${dataType}-list`).append(`<div className="form-check">
-                <input className="form-check-input" name="${dataType}[]" type="${type}" value="" id="${dataType}-${index}">
+                <input className="form-check-input" name="${dataType}[]" type="${type}" data-id="${index + 1}" value="" id="${dataType}-${index}">
                     <label className="form-check-label" htmlFor="${dataType}-${index}">
                         ${value}
                     </label>
@@ -16,6 +16,7 @@ const __App = new Proxy({
             switch (index) {
                 case 0:
                     if (__App.has(__App.options, 'Scheduler')) {
+                        $(`#day-${parseInt(item) - 1}`).attr('disabled', true)
                         let days = __App.options.Scheduler.Day[parseInt(item) - 1].map((day, i) => {
                             if (day === "1") {
                                 return __App.enums.days[i]
@@ -28,21 +29,25 @@ const __App = new Proxy({
                     break
                 case 1:
                     if (__App.has(__App.options, 'Scheduler')) {
+                        $(`#time-${parseInt(item) - 1}`).attr('disabled', true)
                         cell.innerHTML = __App.options.Scheduler.Time[parseInt(item) - 1]
                     }
                     break
                 case 2:
                     if (__App.has(__App.options, 'Templates')) {
+                        $(`#sender-${parseInt(item) - 1}`).attr('disabled', true)
                         cell.innerHTML = __App.options.Templates.Sender[parseInt(item) - 1]
                     }
                     break
                 case 3:
                     if (__App.has(__App.options, 'Templates')) {
+                        $(`#subject-${item}`).attr('disabled', true)
                         cell.innerHTML = __App.options.Templates.Subject[parseInt(item) - 1]
                     }
                     break
                 case 4:
                     if (__App.has(__App.options, 'Destinations')) {
+                        $(`#phone-${parseInt(item) - 1}`).attr('disabled', true)
                         cell.innerHTML = __App.options.Destinations.Tel_num[parseInt(item) - 1]
                     }
                     break
@@ -74,6 +79,18 @@ const __App = new Proxy({
 }, proxyHandler)
 
 $(document).ready(() => {
+    $('.timepicker').timepicker({
+        timeFormat: 'HH:mm',
+        interval: 60,
+        minTime: '0',
+        maxTime: '23',
+        defaultTime: '8',
+        startTime: '0',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true
+    });
+
     __Api.get('dictionaries')
         .then((response) => {
             __App.options = response.data
@@ -84,6 +101,23 @@ $(document).ready(() => {
                 })
         })
 })
+
+window.toggleItems = () => {
+    $('#reference').on('change', 'input[type="checkbox"]', function (e) {
+        e.preventDefault()
+
+        const card = $(this).parents('.card');
+        const checked = card.find('input[type="checkbox"]:checked')
+
+        if (checked.length > 0) {
+            card.find('[data-action="delete"]').removeAttr('disabled')
+        } else {
+            card.find('[data-action="delete"]').attr('disabled', true)
+        }
+
+        return false
+    })
+}
 
 $('[data-action="add"]').on('click', function (e) {
     e.preventDefault();
@@ -108,6 +142,36 @@ $('[data-action="add"]').on('click', function (e) {
     return false;
 })
 
+$('[data-action="delete"]').on('click', function (e) {
+    e.preventDefault();
+
+    const card = $(this).parents('.card');
+    const checked = card.find('input[type="checkbox"]:checked')
+    let ids = [];
+
+    checked.each((i, item) => {
+        ids.push($(item).data('id'))
+    })
+    __Api.delete(`dictionaries/${this.dataset.target}`, null, ids)
+        .then(() => {
+            __Api.get('dictionaries')
+                .then((response) => {
+                    $('.card-body[id*="-list"]').each((ind, item) => item.innerHTML = '')
+                    __App.options = response.data
+
+                    toggleItems()
+
+                    __Api.get('schedules')
+                        .then((response) => {
+                            __App.schedules = response.data.Map
+                            $('.modal').modal('hide');
+                        })
+                })
+        })
+
+    return false
+})
+
 $('#addDay-Modal .modal-footer .btn-primary, ' +
     '#addTime-Modal .modal-footer .btn-primary, ' +
     '#addString-Modal .modal-footer .btn-primary').on('click', function (e) {
@@ -130,6 +194,8 @@ $('#addDay-Modal .modal-footer .btn-primary, ' +
                 .then((response) => {
                     $('.card-body[id*="-list"]').each((ind, item) => item.innerHTML = '')
                     __App.options = response.data
+
+                    toggleItems()
 
                     __Api.get('schedules')
                         .then((response) => {

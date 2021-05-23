@@ -81,6 +81,8 @@ window.handlers = {
                     break;
             }
         }
+
+        toggleItems()
     },
     schedulesHandler: (value = undefined) => {
         const schedules = value.Map_id;

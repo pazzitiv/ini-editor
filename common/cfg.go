@@ -84,10 +84,10 @@ func Save(config Configuration) (err error) {
     /**
     Save new config
      */
-/*    err = cfg.SaveTo("conf.cfg")
+    err = cfg.SaveTo("conf.cfg")
     if err != nil {
         return err
     }
-*/
+
     return
 }
