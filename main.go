@@ -1,6 +1,7 @@
 package main
 
 import (
+    "cfgEditor/common"
     "fmt"
     "github.com/gorilla/mux"
     "log"
@@ -22,8 +23,9 @@ func main() {
         PathPrefix("/static/").
         Handler(http.StripPrefix("/static", fileServer))
 
-    fmt.Println("Server is listening on port 8181...")
-    err := http.ListenAndServe(":8181", Server)
+    serverAddress := fmt.Sprintf("%s:%d", common.AppConfig.Server.Host, common.AppConfig.Server.Port)
+    fmt.Printf("Server is listening on %s...", serverAddress)
+    err := http.ListenAndServe(serverAddress, Server)
     if err != nil {
         log.Fatalf("[FATAL] %s", err.Error())
     }

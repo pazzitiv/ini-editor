@@ -11,6 +11,10 @@ import (
 
 var AppConfig struct{
     ConfigFile string
+    Server struct{
+        Host string
+        Port int
+    }
 }
 
 func init()  {
@@ -20,9 +24,18 @@ func init()  {
     }
 
     AppConfig.ConfigFile = os.Getenv("CONFIGFILE")
-
     if AppConfig.ConfigFile == "" {
         log.Fatalf("Empty field CONFIGFILE in .env. Please fill this field.")
+    }
+
+    AppConfig.Server.Host = os.Getenv("HOST")
+    if AppConfig.Server.Host == "" {
+        log.Fatalf("Empty field HOST in .env. Please fill this field.")
+    }
+
+    AppConfig.Server.Port, _ = strconv.Atoi(os.Getenv("PORT"))
+    if AppConfig.Server.Port == 0 {
+        log.Fatalf("Empty field PORT in .env. Please fill this field.")
     }
 
     log.Printf("Config file: %s", AppConfig.ConfigFile)
