@@ -102,72 +102,105 @@
     </div>
 </div>
 
-<div class="modal fade" id="addTask-Modal" tabindex="-1" aria-labelledby="addDayModalLabel" aria-hidden="true">
+<div class="modal fade" id="addTask-Modal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addTaskModalLabel">Добавление элемента: <span></span></h5>
+                <h5 class="modal-title" id="addTaskModalLabel">Добавление задачи: <span></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <input name="day" class="form-check-input" type="checkbox" value="0" id="mdlTask-day-1">
-                        <label for="mdlTask-day-1" class="form-check-label">Понедельник</label>
+                        <select name="day" class="form-select" aria-label="Дни недели">
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <input name="day" class="form-check-input" type="checkbox" value="1" id="mdlTask-day-2">
-                        <label for="mdlTask-day-2" class="form-check-label">Вторник</label>
+                        <select name="time" class="form-select" aria-label="Период времени">
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <input name="day" class="form-check-input" type="checkbox" value="2" id="mdlTask-day-3">
-                        <label for="mdlTask-day-3" class="form-check-label">Среда</label>
+                        <select name="sender" class="form-select" aria-label="Отправитель">
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <input name="day" class="form-check-input" type="checkbox" value="3" id="mdlTask-day-4">
-                        <label for="mdlTask-day-4" class="form-check-label">Четверг</label>
+                        <select name="subject" class="form-select" aria-label="Тема">
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <input name="day" class="form-check-input" type="checkbox" value="4" id="mdlTask-day-5">
-                        <label for="mdlTask-day-5" class="form-check-label">Пятница</label>
-                    </div>
-                    <div class="mb-3">
-                        <input name="day" class="form-check-input" type="checkbox" value="5" id="mdlTask-day-6">
-                        <label for="mdlTask-day-6" class="form-check-label">Суббота</label>
-                    </div>
-                    <div class="mb-3">
-                        <input name="day" class="form-check-input" type="checkbox" value="6" id="mdlTask-day-7">
-                        <label for="mdlTask-day-7" class="form-check-label">Воскресение</label>
-                    </div>
-                    <div class="mb-3">
-                        <label for="tasktime-from" class="col-form-label">Время начала:</label>
-                        <input name="timeFrom" type="text" class="form-control timepicker" id="tasktime-from">
-                    </div>
-                    <div class="mb-3">
-                        <label for="tasktime-to" class="col-form-label">Время окончания:</label>
-                        <input name="timeTo" type="text" class="form-control timepicker" id="tasktime-to">
-                    </div>
-                    <div class="mb-3">
-                        <label for="string-element" class="col-form-label">Значение элемента:</label>
-                        <input name="string" type="text" class="form-control" id="string-element">
-                    </div>
-                    <div class="mb-3">
-                        <label for="string-element" class="col-form-label">Значение элемента:</label>
-                        <input name="string" type="text" class="form-control" id="string-element">
-                    </div>
-                    <div class="mb-3">
-                        <label for="string-element" class="col-form-label">Значение элемента:</label>
-                        <input name="string" type="text" class="form-control" id="string-element">
-                    </div>
-                    <div class="mb-3">
-                        <label for="string-element" class="col-form-label">Значение элемента:</label>
-                        <input name="string" type="text" class="form-control" id="string-element">
+                        <select name="phone" class="form-select" aria-label="Номер телефона">
+                        </select>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 <button type="button" class="btn btn-primary">Добавить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="System-Modal" tabindex="-1" aria-labelledby="SystemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="SystemModalLabel">Системные настройки<span></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <h3 class="h3">Основные настройки</h3>
+                    <div class="mb-3">
+                        <label for="sys-period" class="col-form-label">Период:</label>
+                        <input name="sys-period" type="text" class="form-control" id="sys-period">
+                    </div>
+                    <div class="mb-3">
+                        <label for="sys-logging" class="col-form-label">Уровень логирования:</label>
+                        <select id="sys-logging" name="sys-logging" class="form-select" aria-label="Уровень логирования">
+                        </select>
+                    </div>
+                    <hr />
+                    <h3 class="h3">Настройка IMAP</h3>
+                    <div class="mb-3">
+                        <label for="sys-server" class="col-form-label">Сервер:</label>
+                        <input name="sys-server" type="text" class="form-control" id="sys-server">
+                    </div>
+                    <div class="mb-3">
+                        <label for="sys-login" class="col-form-label">Логин:</label>
+                        <input name="sys-login" type="text" class="form-control" id="sys-login">
+                    </div>
+                    <div class="mb-3">
+                        <label for="sys-pass" class="col-form-label">Пароль:</label>
+                        <input name="sys-pass" type="password" class="form-control" id="sys-pass">
+                    </div>
+                    <div class="mb-3">
+                        <label for="sys-folder-check" class="col-form-label">Папка проверки:</label>
+                        <input name="sys-folder-check" type="text" class="form-control" id="sys-folder-check">
+                    </div>
+                    <div class="mb-3">
+                        <div className="form-check">
+                            <input className="form-check-input" name="sys-trash" type="checkbox" value="1" id="sys-trash">
+                            <label className="form-check-label" htmlFor="sys-trash">
+                                Корзина
+                            </label>
+                        </div>
+                    </div>
+                    <hr />
+                    <h3 class="h3">Настройка Asterisk</h3>
+                    <div class="mb-3">
+                        <label for="sys-ast-host" class="col-form-label">Хост:</label>
+                        <input name="sys-ast-host" type="text" class="form-control" id="sys-ast-host">
+                    </div>
+                    <div class="mb-3">
+                        <label for="sys-ast-port" class="col-form-label">Порт:</label>
+                        <input name="sys-ast-port" type="number" class="form-control" id="sys-ast-port">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
     </div>

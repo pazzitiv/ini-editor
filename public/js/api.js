@@ -24,7 +24,7 @@ class Api {
         return data
     }
 
-    get(method, data = null) {
+    get(method, data = null, jsonAnswer = true) {
         return fetch(this.base + method + (this.prepareData(data) ?? ''), {
             method: 'GET',
             mode: 'cors',
@@ -34,10 +34,10 @@ class Api {
                 'Content-Type': 'application/json'
             },
             referrerPolicy: 'no-referrer'
-        }).then(response => response.json())
+        }).then(response => jsonAnswer ? response.json() : response)
     }
 
-    post(method, data) {
+    post(method, data, jsonAnswer = true) {
         return fetch(this.base + method, {
             method: 'POST',
             mode: 'cors',
@@ -48,7 +48,7 @@ class Api {
             },
             referrerPolicy: 'no-referrer',
             body: JSON.stringify(data)
-        }).then(response => response.json())
+        }).then(response => jsonAnswer ? response.json() : response)
     }
 
     delete(method, id = null, data = null) {

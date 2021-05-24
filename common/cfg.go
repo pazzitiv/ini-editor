@@ -1,13 +1,35 @@
 package common
 
 import (
+    "github.com/joho/godotenv"
     "gopkg.in/ini.v1"
+    "log"
+    "os"
     "strconv"
     "strings"
 )
 
+var AppConfig struct{
+    ConfigFile string
+}
+
+func init()  {
+    err := godotenv.Load()
+    if err != nil {
+        log.Fatal("Error loading .env file")
+    }
+
+    AppConfig.ConfigFile = os.Getenv("CONFIGFILE")
+
+    if AppConfig.ConfigFile == "" {
+        log.Fatalf("Empty field CONFIGFILE in .env. Please fill this field.")
+    }
+
+    log.Printf("Config file: %s", AppConfig.ConfigFile)
+}
+
 func Load() (cfg *ini.File, err error) {
-    cfg, err = ini.Load("conf.cfg")
+    cfg, err = ini.Load(AppConfig.ConfigFile)
 
     return
 }
@@ -19,7 +41,7 @@ func Save(config Configuration) (err error) {
         values []string
     )
 
-    cfg, err = ini.Load("conf.cfg")
+    cfg, err = ini.Load(AppConfig.ConfigFile)
     if err != nil {
         return err
     }
@@ -84,7 +106,7 @@ func Save(config Configuration) (err error) {
     /**
     Save new config
      */
-    err = cfg.SaveTo("conf.cfg")
+    err = cfg.SaveTo(AppConfig.ConfigFile)
     if err != nil {
         return err
     }

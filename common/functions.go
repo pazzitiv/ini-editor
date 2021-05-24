@@ -111,7 +111,7 @@ func parseConfig(cfg *ini.File) (config Configuration, err error) {
     if err != nil {
         return config, err
     }
-    config.System.Period = value.MustUint()
+    config.System.Period = value.MustInt()
 
     value, err = section.GetKey("logging")
     if err != nil {
@@ -155,7 +155,7 @@ func parseConfig(cfg *ini.File) (config Configuration, err error) {
     if err != nil {
         return config, err
     }
-    config.Imap.Trash = value.MustUint()
+    config.Imap.Trash = value.MustInt()
     /**
       Section "ASTERISK"
     */
@@ -174,7 +174,7 @@ func parseConfig(cfg *ini.File) (config Configuration, err error) {
     if err != nil {
         return config, err
     }
-    config.Asterisk.Port = value.MustUint()
+    config.Asterisk.Port = value.MustInt()
 
     return
 }

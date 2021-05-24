@@ -87,8 +87,28 @@ window.handlers = {
     schedulesHandler: (value = undefined) => {
         const schedules = value.Map_id;
 
+        $('#scheduler table tbody').html('')
+
         schedules.forEach((item, ind) => {
             __App.addSchedule(item, ind + 1)
         })
     },
+    systemHandler: (value = undefined) => {
+        $('#sys-period').val(value.System.Period);
+        __App.enums.log_levels.forEach((item) => {
+            $('#sys-logging').append(`<option ${item == value.System.Logging ? 'selected' : ''}>${item}</option>`)
+        });
+
+        $('#sys-server').val(value.Imap.Server);
+        $('#sys-login').val(value.Imap.Login);
+        $('#sys-folder-check').val(value.Imap.Folder_check);
+        if (value.Imap.Trash === 1) {
+            $('#sys-trash').attr('checked');
+        } else {
+            $('#sys-trash').removeAttr('checked');
+        }
+
+        $('#sys-ast-host').val(value.Asterisk.Host);
+        $('#sys-ast-port').val(value.Asterisk.Port);
+    }
 }

@@ -61,6 +61,11 @@ const __App = new Proxy({
 
             row.append(cell)
         })
+
+        let cell = document.createElement('td')
+        cell.innerHTML = `<td><i class="fas fa-trash" id="delete-task-${num}"></i></td>`
+        row.append(cell)
+
         tb.append(row)
     },
     has: (object, prop) => {
@@ -76,6 +81,7 @@ const __App = new Proxy({
     },
     options: {},
     schedules: {},
+    system: {},
 }, proxyHandler)
 
 $(document).ready(() => {
@@ -153,6 +159,159 @@ $('[data-action="delete"]').on('click', function (e) {
         ids.push($(item).data('id'))
     })
     __Api.delete(`dictionaries/${this.dataset.target}`, null, ids)
+        .then(() => {
+            __Api.get('dictionaries')
+                .then((response) => {
+                    $('.card-body[id*="-list"]').each((ind, item) => item.innerHTML = '')
+                    __App.options = response.data
+
+                    toggleItems()
+
+                    __Api.get('schedules')
+                        .then((response) => {
+                            __App.schedules = response.data.Map
+                            $('.modal').modal('hide');
+                        })
+                })
+        })
+
+    return false
+})
+
+$('#system-options').on('click', function (e) {
+    e.preventDefault()
+
+    const modal = $('#System-Modal')
+
+    __Api.get('system')
+        .then((response) => {
+            __App.system = response.data
+        })
+
+    modal.modal('show')
+
+    return false
+})
+
+$('#addTask-Modal .modal-footer .btn-primary').on('click', function (e) {
+    e.preventDefault()
+
+    const modal = $(this).parents('.modal');
+    const form = modal.find('form')
+
+    __Api.post('schedules', __Api.serializeObject(form), false)
+        .then(() => {
+            __Api.get('dictionaries')
+                .then((response) => {
+                    $('.card-body[id*="-list"]').each((ind, item) => item.innerHTML = '')
+                    __App.options = response.data
+
+                    toggleItems()
+
+                    __Api.get('schedules')
+                        .then((response) => {
+                            __App.schedules = response.data.Map
+                            $('.modal').modal('hide');
+                        })
+                })
+        })
+
+
+    return false
+})
+
+$('#System-Modal .modal-footer .btn-primary').on('click', function (e) {
+    e.preventDefault()
+
+    const modal = $(this).parents('.modal');
+    const form = modal.find('form')
+
+    __Api.post('system', __Api.serializeObject(form), false)
+        .then(() => {
+            __Api.get('system')
+                .then((response) => {
+                    __App.system = response.data
+                    $('.modal').modal('hide');
+                })
+        })
+
+
+    return false
+})
+
+$(document).on('click', '#scheduler table td input[type="checkbox"][id^="task-"]', function (e) {
+    e.preventDefault()
+
+    const id = $(this).attr('id').replace('task-', '')
+
+    __Api.get(`schedules/toggle/${id}`, null, false)
+        .then(() => {
+            __Api.get('dictionaries')
+                .then((response) => {
+                    $('.card-body[id*="-list"]').each((ind, item) => item.innerHTML = '')
+                    __App.options = response.data
+
+                    toggleItems()
+
+                    __Api.get('schedules')
+                        .then((response) => {
+                            __App.schedules = response.data.Map
+                            $('.modal').modal('hide');
+                        })
+                })
+        })
+
+    return false
+})
+
+$(document).on('click', '#task-add', function (e) {
+    e.preventDefault()
+
+    const modal = $('#addTask-Modal');
+    modal.modal('show');
+    modal.find('select').html('')
+
+    let select = modal.find('[name="day"]');
+    __App.options.Scheduler.Day.forEach((item, index) => {
+        let days = item.map((day, i) => {
+            if (day === "1") {
+                return __App.enums.days[i]
+            }
+            return ''
+        }).filter(d => d !== '')
+
+        select.append(`<option value="${index + 1}">${days.join(',')}</option>`)
+    })
+
+    select = modal.find('[name="time"]');
+    __App.options.Scheduler.Time.forEach((item, index) => {
+        select.append(`<option value="${index + 1}">${item}</option>`)
+    })
+
+    select = modal.find('[name="sender"]');
+    __App.options.Templates.Sender.forEach((item, index) => {
+        select.append(`<option value="${index + 1}">${item}</option>`)
+    })
+
+    select = modal.find('[name="subject"]');
+    __App.options.Templates.Subject.forEach((item, index) => {
+        select.append(`<option value="${index + 1}">${item}</option>`)
+    })
+
+    select = modal.find('[name="phone"]');
+    __App.options.Destinations.Tel_num.forEach((item, index) => {
+        select.append(`<option value="${index + 1}">${item}</option>`)
+    })
+
+    return false
+})
+
+$(document).on('click', '[id^="delete-task-"]', function (e) {
+    e.preventDefault()
+
+    const id = $(this).attr('id').replace('delete-task-', '')
+
+    __Api.delete(`schedules`, id, null)
         .then(() => {
             __Api.get('dictionaries')
                 .then((response) => {

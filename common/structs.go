@@ -20,21 +20,7 @@ func (d *PageData) Reset()  {
 type Configuration struct {
     Dictionaries
     Schedules
-    System struct {
-        Period uint
-        Logging string
-    }
-    Imap struct {
-        Server string
-        Login string
-        Pass string
-        Folder_check string
-        Trash uint
-    }
-    Asterisk struct {
-        Host string
-        Port uint
-    }
+    GeneralOptions
 }
 
 func (c *Configuration) GetListItem(sl [][]string, ind string) []string {
@@ -103,5 +89,37 @@ func (s *Scheduler) List() Schedules {
     s.config = GetConfiguration()
     return Schedules{
         Map: s.config.Map,
+    }
+}
+
+type GeneralOptions struct {
+    System struct {
+        Period int
+        Logging string
+    }
+    Imap struct {
+        Server string
+        Login string
+        Pass string
+        Folder_check string
+        Trash int
+    }
+    Asterisk struct {
+        Host string
+        Port int
+    }
+}
+
+type SystemOptions struct {
+    config  Configuration
+    cfgFile *ini.File
+}
+
+func (s *SystemOptions) List() GeneralOptions {
+    s.config = GetConfiguration()
+    return GeneralOptions{
+        System: s.config.System,
+        Imap: s.config.Imap,
+        Asterisk: s.config.Asterisk,
     }
 }
